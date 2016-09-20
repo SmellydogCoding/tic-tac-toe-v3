@@ -4,5 +4,5 @@
   var board = new Board;
   var players = new Players('o');
   ui.renderHTML('body',ui.startScreen);
-  ui.startButtonEvent(ui,board);
+  ui.startGame();
 }();
