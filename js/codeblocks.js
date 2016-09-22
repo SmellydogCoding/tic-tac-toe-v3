@@ -1,4 +1,7 @@
-function CodeBlocks() {  
+function CodeBlocks(players,board) {
+  Players.call(this,players);
+  Board.call(this,board);
+
   this.startScreen = '<div class="screen screen-start" id="start">'
   this.startScreen += '<header>'
   this.startScreen += '<h1>Tic Tac Toe</h1>'
@@ -25,11 +28,24 @@ function CodeBlocks() {
   this.initialBoard += '</ul>'
   this.initialBoard += '</div>'
 
-  this.gameOver = '<div class="screen screen-win" id="finish">'
-  this.gameOver += '<header>'
-  this.gameOver += '<h1>Tic Tac Toe</h1>'
-  this.gameOver += '<p class="message"></p>'
-  this.gameOver += '<a id="newGame" href="#" class="button">New game</a>'
-  this.gameOver += '</header>'
-  this.gameOver += '</div>'
+  this.gameEndScreen = function(win,tie,players) {
+    if (win && players.current === players.player1) {
+    this.gameOver = '<div class="screen screen-win screen-win-one" id="finish">'
+    } else if (win && players.current === players.player2) {
+      this.gameOver = '<div class="screen screen-win screen-win-two" id="finish">'
+    } else if (tie) {
+      this.gameOver = '<div class="screen screen-win screen-win-tie" id="finish">'
+    }
+    this.gameOver += '<header>'
+    this.gameOver += '<h1>Tic Tac Toe</h1>'
+    if (win) {
+      this.gameOver += '<p class="message">Winner</p>'
+    } else {
+      this.gameOver += '<p class="message">It\'s a Tie!</p>'
+    }
+    this.gameOver += '<a id="newGame" href="#" class="button">New game</a>'
+    this.gameOver += '</header>'
+    this.gameOver += '</div>'
+    return this.gameOver;
+  }
 }
