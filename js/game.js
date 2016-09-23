@@ -6,12 +6,38 @@ var Game = (function GamePlay() {
     start();
   };
 
-  var startScreen = '<div class="screen screen-start" id="start">';
-  startScreen += '<header>';
-  startScreen += '<h1>Tic Tac Toe</h1>';
-  startScreen += '<a id="startGame" href="#" class="button">Start Game</a>';
-  startScreen += '</header>';
-  startScreen += '</div>';
+  var repeat = false;
+  var type;
+  var startScreen;
+
+  var gameTypeScreen = '<div class="screen screen-start" id="type">';
+  gameTypeScreen += '<header>';
+  gameTypeScreen += '<h1>Tic Tac Toe</h1>';
+  gameTypeScreen += '<p class="intro">Please Choose Your Game Type:</p>'
+  gameTypeScreen += '<a id="1player" href="#" class="button">1 Player Game<br><span class="subtitle">player vs. computer</span></a>'
+  gameTypeScreen += '<a id="2player" href="#" class="button">2 Player Game<br><span class="subtitle">player vs. player</span></a>'
+  gameTypeScreen += '</header>';
+  gameTypeScreen += '</div>';
+
+  var buildStartScreen = function() {
+    startScreen += '<div class="screen screen-start" id="start">';
+    startScreen += '<header>';
+    startScreen += '<h1>Tic Tac Toe</h1>';
+    startScreen += '<p class="intro">Please Enter Your '
+    if (type === 1) {
+      startScreen += 'Name:'
+    } else if (type === 2) {
+      startScreen += 'Names:'
+    }
+    startScreen += '</p>'
+    startScreen += '<input type="text" name="player1" placeholder="Player 1" class="button">'
+    if (type === 2) {
+      startScreen += '<input type="text" name="player2" placeholder ="Player 2" class="button">'
+    }
+    startScreen += '<a id="startGame" href="#" class="button">Start Game</a>';
+    startScreen += '</header>';
+    startScreen += '</div>';
+  };
 
   var renderHTML = function(target,html) {
     $(target).html(html);
@@ -45,7 +71,89 @@ var Game = (function GamePlay() {
         $(this).css('background-image','none');
       }
     });
-  }
+  };
+
+  var gameEndScreen = function(result) {
+    var players = Players.getPlayers();
+    var gameOver;
+    if (result === 'win' && players.current === players.player1) {
+    gameOver = '<div class="screen screen-win screen-win-one" id="finish">';
+    } else if (result === 'win' && players.current === players.player2) {
+      gameOver = '<div class="screen screen-win screen-win-two" id="finish">';
+    } else if (result === 'tie') {
+      gameOver = '<div class="screen screen-win screen-win-tie" id="finish">';
+    }
+    gameOver += '<header>';
+    gameOver += '<h1>Tic Tac Toe</h1>';
+    if (result === 'win') {
+      gameOver += '<p class="message">Winner:<br>' + players.current.name + '</p>';
+      // gameOver += '<p class="winnerName">' + players.current.name + '</p>'
+    } else {
+      gameOver += '<p class="message">It\'s a Tie!</p>';
+    }
+    gameOver += '<a id="newGame" href="#" class="button">New game</a>';
+    gameOver += '</header>';
+    gameOver += '</div>';
+    return gameOver;
+  };
+
+  var start = function() {
+    if (repeat) {
+      $('#finish').detach();
+    }
+      renderHTML('body',gameTypeScreen);
+      setGameTypeButtons();
+  };
+
+   var setGameTypeButtons = function() {
+    $('#1player').click(function(){
+      type = 1;
+      setGameType();
+    });
+    $('#2player').click(function(){
+      type = 2;
+      setGameType();
+    });
+  };
+
+  var setGameType = function() {
+    $("#type").detach();
+    buildStartScreen();
+    renderHTML('body',startScreen);
+    getNames();
+  };
+
+  var getNames = function() {
+    $('#startGame').click(function(event) {
+      $('input[name=player1],input[name=player2]').removeClass('inputError');
+      $('.intro').removeClass('textError');
+      if ($('input[name=player1]').val() === '' || ($('input[name=player2]').val() === '') && type === 2) {
+        event.preventDefault();
+        if ($('input[name=player1]').val() === '') {
+          $('input[name=player1]').addClass('inputError');
+        } 
+        if ($('input[name=player2]').val() === '' && type === 2) {
+          $('input[name=player2]').addClass('inputError');
+        }
+        $('.intro').addClass('textError');
+      } else {
+        var player1 = $('input[name=player1]').val();
+        var player2 = $('input[name=player2]').val();
+        Players.setPlayerNames(player1,player2);
+        $("#start").detach();
+        renderHTML('body',Board.getInitialBoard);
+        $('.player1').html(player1);
+        $('.player2').html(player2);
+        move();
+      }
+    });
+  };
+
+  var move = function() {
+    renderCurrentPlayer();
+    hoverCurrent();
+    setMarker();
+  };
 
   var setMarker = function() {
     var players = Players.getPlayers();
@@ -61,50 +169,6 @@ var Game = (function GamePlay() {
         afterMove();
       }
     });
-  }
-
-  var gameEndScreen = function(result) {
-    var players = Players.getPlayers();
-    var gameOver;
-    if (result === 'win' && players.current === players.player1) {
-    gameOver = '<div class="screen screen-win screen-win-one" id="finish">';
-    } else if (result === 'win' && players.current === players.player2) {
-      gameOver = '<div class="screen screen-win screen-win-two" id="finish">';
-    } else if (result === 'tie') {
-      gameOver = '<div class="screen screen-win screen-win-tie" id="finish">';
-    }
-    gameOver += '<header>';
-    gameOver += '<h1>Tic Tac Toe</h1>';
-    if (result === 'win') {
-      gameOver += '<p class="message">Winner</p>';
-    } else {
-      gameOver += '<p class="message">It\'s a Tie!</p>';
-    }
-    gameOver += '<a id="newGame" href="#" class="button">New game</a>';
-    gameOver += '</header>';
-    gameOver += '</div>';
-    return gameOver;
-  }
-
-  var start = function(repeat) {
-    if (repeat) {
-      $('#finish').detach();
-      renderHTML('body',Board.getInitialBoard);
-      move();
-    } else {
-      renderHTML('body',startScreen);
-      $('#startGame').click(function(){
-        $("#start").detach();
-        renderHTML('body',Board.getInitialBoard);
-        move();
-      });
-    }
-  };
-
-  var move = function() {
-    renderCurrentPlayer();
-    hoverCurrent();
-    setMarker();
   };
 
   var afterMove = function() {
@@ -113,7 +177,8 @@ var Game = (function GamePlay() {
       $('#board').detach();
       renderHTML('body',gameEndScreen(result));
       $('#newGame').click(function() {
-        start(true);
+        repeat = true;
+        init();
       });
     } else {
       Players.changePlayers();

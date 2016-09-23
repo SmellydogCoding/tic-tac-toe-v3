@@ -8,11 +8,10 @@ var Players = (function Players() {
     player2: {
       name: "two",
       marker: ""
-    },
-    current: function() {
-      return this.player1;
     }
   }
+
+  players.current = players.player1;
 
   var setPlayerTwo = function() {
     if (players.player1.marker === "o") {
@@ -21,6 +20,11 @@ var Players = (function Players() {
       players.player2.marker = "o";
     }
   }
+
+  var setPlayerNames = function(player1,player2) {
+    players.player1.name = player1;
+    players.player2.name = player2;
+  };
 
   var changePlayers = function() {
     if (players.current === players.player1) {
@@ -36,6 +40,7 @@ var Players = (function Players() {
 
   return {
     setPlayerTwo: setPlayerTwo,
+    setPlayerNames: setPlayerNames,
     getPlayers: getPlayers,
     changePlayers: changePlayers
   }

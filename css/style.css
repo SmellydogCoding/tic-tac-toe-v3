@@ -51,7 +51,7 @@ h1 {
     .screen-start h1 + .button {
       margin-top: 5em; }
   .screen-win p {
-    font-size: 6em;
+    font-size: 4.5em;
     font-weight: 700;
     color: #fff;
     position: relative; }
@@ -72,14 +72,16 @@ h1 {
       color: #3688C3; }
     .screen-win-one p:before {
       content: "o";
-      top: 1.75rem; }
+      top: 3.45rem;
+      font-size: 6.0em; }
   .screen-win-two {
     background: #3688C3; }
     .screen-win-two .button {
       color: #FFA000; }
     .screen-win-two p:before {
       content: "×";
-      top: 4.5rem; }
+      top: 6.1rem;
+      font-size: 6.0em; }
 
 .board {
   padding-top: 1em; }
@@ -92,7 +94,7 @@ h1 {
   position: absolute;
   top: 1rem;
   width: 35%;
-  padding: 1.25em 0 1em;
+  padding: 1.25em 1.0em 1em;
   outline: 1px solid #ccc;
   transition: 1s; }
   .players svg g {
@@ -138,4 +140,34 @@ h1 {
       background-color: #3688C3;
       background-image: url(../img/x.svg); }
 
+.intro {
+  margin-top: 2.0em;
+}
 
+.subtitle {
+  font-size: 0.8em;
+}
+
+.button {
+  margin: 1.0em;
+}
+
+.textError {
+  color: firebrick;
+}
+
+.inputError {
+  border: 2px solid firebrick;
+}
+
+.player1, .player2 {
+  float: right;
+  color: #000;
+  margin-top: 1.4%;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.player2 {
+  float: left;
+}
