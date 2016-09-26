@@ -32,6 +32,7 @@ var Players = (function Players() {
     } else {
       players.current = players.player1;
     }
+    // console.log(players.current);
   }
 
   var getPlayers = function() {

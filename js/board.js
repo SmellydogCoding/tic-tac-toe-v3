@@ -33,6 +33,14 @@ var Board = (function Board() {
     return initialBoardHTML;
   }
 
+  var getBoard = function() {
+    return board;
+  }
+
+  var getWinningRoutes = function() {
+    return winningRoutes;
+  }
+
   var boardContents = function() {
     $('.boxes li').each(function(){
       var index = parseInt($(this).attr('data-square'));
@@ -46,12 +54,13 @@ var Board = (function Board() {
     });
   }
 
-  var winningBoard = function () {
+  var winningBoard = function (board) {
     for (var i = 0; i < winningRoutes.length; i++) {
-      if ((board[winningRoutes[i][0]] === "x" && board[winningRoutes[i][1]] === "x" && board[winningRoutes[i][2]] === "x") ||
-          (board[winningRoutes[i][0]] === "o" && board[winningRoutes[i][1]] === "o" && board[winningRoutes[i][2]] === "o")) {
-            return result = 'win';
-          }
+      if (board[winningRoutes[i][0]] === "x" && board[winningRoutes[i][1]] === "x" && board[winningRoutes[i][2]] === "x") {
+        return result = 'winx';
+      } else if (board[winningRoutes[i][0]] === "o" && board[winningRoutes[i][1]] === "o" && board[winningRoutes[i][2]] === "o") {
+        return result = 'wino';
+      }
     }
   }
 
@@ -63,16 +72,34 @@ var Board = (function Board() {
 
   var status = function() {
     boardContents();
-    winningBoard();
-    if (result !== 'win') {
+    winningBoard(board);
+    if (result !== 'winx' && result !== 'wino') {
       tieBoard();
     }
+    return result;
+  }
+
+  var checkAIBoard = function(mmboard) {
+    console.log(mmboard);
+    var result;
+    result = winningBoard(mmboard);
+    if (result !== 'winx' && result !== 'wino') {
+     result = tieBoard(mmboard);
+    }
+    if (result !== 'winx' && result !== 'wino' & result !== 'tie') {
+      result = 'in progress'
+    }
+    console.log(result);
     return result;
   }
 
   return {
     clearBoard: clearBoard,
     getInitialBoard: getInitialBoard,
-    status: status
+    getBoard: getBoard,
+    getWinningRoutes: getWinningRoutes,
+    status: status,
+    winningBoard: winningBoard,
+    checkAIBoard: checkAIBoard
   }
 })();

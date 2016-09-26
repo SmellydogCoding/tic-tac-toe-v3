@@ -8,7 +8,6 @@ var Game = (function GamePlay() {
 
   var repeat = false;
   var type;
-  var startScreen;
 
   var gameTypeScreen = '<div class="screen screen-start" id="type">';
   gameTypeScreen += '<header>';
@@ -20,23 +19,24 @@ var Game = (function GamePlay() {
   gameTypeScreen += '</div>';
 
   var buildStartScreen = function() {
-    startScreen += '<div class="screen screen-start" id="start">';
+    var startScreen = '<div class="screen screen-start" id="start">';
     startScreen += '<header>';
     startScreen += '<h1>Tic Tac Toe</h1>';
-    startScreen += '<p class="intro">Please Enter Your '
+    startScreen += '<p class="intro">Please Enter Your ';
     if (type === 1) {
-      startScreen += 'Name:'
+      startScreen += 'Name:';
     } else if (type === 2) {
-      startScreen += 'Names:'
+      startScreen += 'Names:';
     }
-    startScreen += '</p>'
-    startScreen += '<input type="text" name="player1" placeholder="Player 1" class="button">'
+    startScreen += '</p>';
+    startScreen += '<input type="text" name="player1" placeholder="Player 1" class="button">';
     if (type === 2) {
-      startScreen += '<input type="text" name="player2" placeholder ="Player 2" class="button">'
+      startScreen += '<input type="text" name="player2" placeholder ="Player 2" class="button">';
     }
     startScreen += '<a id="startGame" href="#" class="button">Start Game</a>';
     startScreen += '</header>';
     startScreen += '</div>';
+    return startScreen;
   };
 
   var renderHTML = function(target,html) {
@@ -76,18 +76,17 @@ var Game = (function GamePlay() {
   var gameEndScreen = function(result) {
     var players = Players.getPlayers();
     var gameOver;
-    if (result === 'win' && players.current === players.player1) {
+    if (result === 'wino') {
     gameOver = '<div class="screen screen-win screen-win-one" id="finish">';
-    } else if (result === 'win' && players.current === players.player2) {
+    } else if (result === 'winx') {
       gameOver = '<div class="screen screen-win screen-win-two" id="finish">';
     } else if (result === 'tie') {
       gameOver = '<div class="screen screen-win screen-win-tie" id="finish">';
     }
     gameOver += '<header>';
     gameOver += '<h1>Tic Tac Toe</h1>';
-    if (result === 'win') {
+    if (result === 'winx' || result === 'wino') {
       gameOver += '<p class="message">Winner:<br>' + players.current.name + '</p>';
-      // gameOver += '<p class="winnerName">' + players.current.name + '</p>'
     } else {
       gameOver += '<p class="message">It\'s a Tie!</p>';
     }
@@ -118,8 +117,8 @@ var Game = (function GamePlay() {
 
   var setGameType = function() {
     $("#type").detach();
-    buildStartScreen();
-    renderHTML('body',startScreen);
+    var startPage = buildStartScreen();
+    renderHTML('body',startPage);
     getNames();
   };
 
@@ -138,7 +137,9 @@ var Game = (function GamePlay() {
         $('.intro').addClass('textError');
       } else {
         var player1 = $('input[name=player1]').val();
-        var player2 = $('input[name=player2]').val();
+        if (type === 2) {
+          var player2 = $('input[name=player2]').val();
+        } else var player2 = 'Computer';
         Players.setPlayerNames(player1,player2);
         $("#start").detach();
         renderHTML('body',Board.getInitialBoard);
@@ -173,7 +174,8 @@ var Game = (function GamePlay() {
 
   var afterMove = function() {
     var result = Board.status();
-    if (result === "win" || result === "tie") {
+    var players = Players.getPlayers(); 
+    if (result === "winx" || result === "wino" || result === "tie") {
       $('#board').detach();
       renderHTML('body',gameEndScreen(result));
       $('#newGame').click(function() {
@@ -182,7 +184,13 @@ var Game = (function GamePlay() {
       });
     } else {
       Players.changePlayers();
-      move();
+      // console.log(players.current.name === 'Computer');
+      if(type === 1 && players.current.name === 'Computer') {
+        AI.computerMove();
+        afterMove();
+      } else {
+        move();
+      }
     }
   };
 
