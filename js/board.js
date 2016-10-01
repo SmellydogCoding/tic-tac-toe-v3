@@ -1,10 +1,11 @@
 var Board = (function Board() {
+  "use strict";
   
-  var board = [];
+  var gameboard = [];
   var winningRoutes = [
     [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
   ]
-  var result = 'game in progress';
+
   var initialBoardHTML = '<div class="board" id="board">';
   initialBoardHTML += '<header>';
   initialBoardHTML += '<h1>Tic Tac Toe</h1>';
@@ -18,15 +19,14 @@ var Board = (function Board() {
   initialBoardHTML += '</ul>';
   initialBoardHTML += '</header>';
   initialBoardHTML += '<ul class="boxes">';
-  for(s = 0; s < 9; s++) {
+  for(var s = 0; s < 9; s++) {
     initialBoardHTML += '<li class="box" data-square="' + s + '"></li>';
   }
   initialBoardHTML += '</ul>';
   initialBoardHTML += '</div>';
 
-  var clearBoard = function() {
-    board = [];
-    result = 'game in progress';
+  var init = function() {
+    gameboard = [];
   }
 
   var getInitialBoard = function() {
@@ -34,72 +34,56 @@ var Board = (function Board() {
   }
 
   var getBoard = function() {
-    return board;
-  }
-
-  var getWinningRoutes = function() {
-    return winningRoutes;
+    return gameboard;
   }
 
   var boardContents = function() {
     $('.boxes li').each(function(){
       var index = parseInt($(this).attr('data-square'));
       if ($(this).hasClass('box-filled-1')) {
-        board[index] = 'o';
+        gameboard[index] = 'o';
       } else if ($(this).hasClass('box-filled-2')) {
-        board[index] = 'x';
+        gameboard[index] = 'x';
       } else {
-        board[index] = '';
+        gameboard[index] = '';
       }
     });
   }
 
-  var winningBoard = function (board) {
+  var winningBoard = function (eitherboard) {
+//    debugger;
+    var result = 'game in progress';
     for (var i = 0; i < winningRoutes.length; i++) {
-      if (board[winningRoutes[i][0]] === "x" && board[winningRoutes[i][1]] === "x" && board[winningRoutes[i][2]] === "x") {
-        return result = 'winx';
-      } else if (board[winningRoutes[i][0]] === "o" && board[winningRoutes[i][1]] === "o" && board[winningRoutes[i][2]] === "o") {
-        return result = 'wino';
-      }
+      if (eitherboard[winningRoutes[i][0]] === 'x' && eitherboard[winningRoutes[i][1]] === 'x' && eitherboard[winningRoutes[i][2]] === 'x') {
+        result = 'winx';
+        break;
+      } else if (eitherboard[winningRoutes[i][0]] === 'o' && eitherboard[winningRoutes[i][1]] === 'o' && eitherboard[winningRoutes[i][2]] === 'o') {
+        result = 'wino';
+        break;
+      }   
     }
-  }
-
-  var tieBoard = function() {
-    if (($.inArray('', board) > -1) === false) {
-      return result = 'tie';
+    if (eitherboard.indexOf('') === -1 && result !== 'winx' && result !== 'wino') {
+        result = 'tie';
     }
+    return result;
   }
 
   var status = function() {
     boardContents();
-    winningBoard(board);
-    if (result !== 'winx' && result !== 'wino') {
-      tieBoard();
-    }
+    var result = winningBoard(gameboard);
     return result;
   }
 
-  var checkAIBoard = function(mmboard) {
-    console.log(mmboard);
-    var result;
-    result = winningBoard(mmboard);
-    if (result !== 'winx' && result !== 'wino') {
-     result = tieBoard(mmboard);
-    }
-    if (result !== 'winx' && result !== 'wino' & result !== 'tie') {
-      result = 'in progress'
-    }
-    console.log(result);
-    return result;
+  var checkAIBoard = function(aiboard) {
+    var airesult = winningBoard(aiboard);
+    return airesult;
   }
 
   return {
-    clearBoard: clearBoard,
+    init: init,
     getInitialBoard: getInitialBoard,
     getBoard: getBoard,
-    getWinningRoutes: getWinningRoutes,
     status: status,
-    winningBoard: winningBoard,
     checkAIBoard: checkAIBoard
   }
 })();

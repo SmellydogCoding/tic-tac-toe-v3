@@ -1,8 +1,10 @@
 var Game = (function GamePlay() {
+  "use strict";
 
   var init = function(){
-    Players.setPlayerTwo();
-    Board.clearBoard();
+//    Players.setPlayerTwo();
+    Players.init();
+    Board.init();
     start();
   };
 
@@ -184,7 +186,6 @@ var Game = (function GamePlay() {
       });
     } else {
       Players.changePlayers();
-      // console.log(players.current.name === 'Computer');
       if(type === 1 && players.current.name === 'Computer') {
         AI.computerMove();
         afterMove();

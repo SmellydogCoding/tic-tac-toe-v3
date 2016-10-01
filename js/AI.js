@@ -1,92 +1,87 @@
 var AI = (function(){
+  "use strict";
   
-  var current;
-  var winningRoutes = Board.getWinningRoutes;
-  var bestChoice;
+  var currentMarker;
+  var computerChoice;
   
   var computerMove = function() {
-    // console.log('AI');
-    var board = Board.getBoard();
-    current = 'x';
-    minimax(board,0);
-    console.log(bestChoice);
-    $('li[data-square="' + bestChoice + '"]').addClass('box-filled-2').css('background-image','url("img/x.svg")');
+    var aiboard = Board.getBoard();
+    currentMarker = 'x';
+    minimax(aiboard,0);
+    $('li[data-square="' + computerChoice + '"]').addClass('box-filled-2').css('background-image','url("img/x.svg")');
   };
 
-  var getAvailableMoves = function() {
-    var moves = [];
-    for(a = 0; a < board.length; a++) {
-      if (board[a] === '') {
-        moves.push(a);
+  var getAvailableMoves = function(aiboard) {
+    var availableMovesList = [];
+    for(var a = 0; a < aiboard.length; a++) {
+      if (aiboard[a] === '') {
+        availableMovesList.push(a);
       }
     }
-    return moves;
+    return availableMovesList;
   }
   
-  var score = function(board,depth) {
-    var winner = Board.checkAIBoard(board);
-    if (winner === 'x') {
+  var score = function(depth,aiboard) {
+    var aistatus = Board.checkAIBoard(aiboard);
+    if (aistatus === 'winx') {
       return 10 - depth;
-    } else if (winner === 'o') {
+    } else if (aistatus === 'wino') {
       return depth - 10;
     } else {
       return 0;
     }
   }
 
-  var testMove = function(move,mmboard) {
-    mmboard[move] = current;
-    return mmboard;
+  var makeNewBranch = function(move,aiboard) {
+    aiboard[move] = currentMarker;
+    changePlayer();
+    return aiboard;
   }
 
   var changePlayer = function() {
-    if (current === 'x') {
-        current = 'o';
+    if (currentMarker === 'x') {
+        currentMarker = 'o';
       } else {
-        current = 'x';
+        currentMarker = 'x';
       }
   }
 
-  var clearMove = function(move,mmboard) {
-    mmboard[move] = '';
-    return mmboard;
+  var clearMove = function(move,aiboard) {
+    aiboard[move] = '';
+    changePlayer();
+    return aiboard;
   }
 
-  var minimax = function(mmboard,depth) {
-    console.log(mmboard);
-    console.log(Board.checkAIBoard(mmboard));
-    if (Board.checkAIBoard(mmboard) !== 'in progress') {
-      return score(mmboard,depth);
+  var minimax = function(aiboard,depth) {
+    if (Board.checkAIBoard(aiboard) !== 'game in progress') {
+      return score(depth,aiboard);
     }
     depth += 1;
     var scores = [];
     var moves = [];
-    var availableMoves = getAvailableMoves(mmboard);
+    var availableMoves = getAvailableMoves(aiboard);
     var move;
     var branch;
-    for (m = 0; m < availableMoves.length; m++) {
+    for (var m = 0; m < availableMoves.length; m++) {
       move = availableMoves[m];
-      branch = testMove(move,mmboard);
-      changePlayer();
+      branch = makeNewBranch(move,aiboard);
       scores.push(minimax(branch,depth));
-      console.log(scores);
       moves.push(move);
-      mmboard = clearMove(move,mmboard);
-      changePlayer();
+      aiboard = clearMove(move,aiboard);
     }
     var highScore;
     var highScoreIndex;
     var lowScore;
     var lowScoreIndex;
-    if (current === 'x') {
+    if (currentMarker === 'x') {
       highScore = Math.max.apply(Math,scores);
       highScoreIndex = scores.indexOf(highScore);
-      bestChoice = moves[highScoreIndex];
+      computerChoice = moves[highScoreIndex];
       return scores[highScoreIndex];
-    } else if (current === 'o') {
+    } else {
       lowScore = Math.max.apply(Math,scores);
       lowScoreIndex = scores.indexOf(lowScore);
-      bestChoice = moves[lowScoreIndex];
+      computerChoice = moves[lowScoreIndex];
       return scores[lowScoreIndex];
     }
   }
