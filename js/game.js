@@ -1,16 +1,17 @@
 var Game = (function GamePlay() {
   "use strict";
 
+  // set players, clear board, and start new game
   var init = function(){
-//    Players.setPlayerTwo();
     Players.init();
     Board.init();
     start();
   };
 
-  var repeat = false;
+  var repeat = false;  // did the user click 'new game' after the last game or is this the first game?
   var type;
 
+  // HTML code block for the choose game type screen
   var gameTypeScreen = '<div class="screen screen-start" id="type">';
   gameTypeScreen += '<header>';
   gameTypeScreen += '<h1>Tic Tac Toe</h1>';
@@ -20,6 +21,7 @@ var Game = (function GamePlay() {
   gameTypeScreen += '</header>';
   gameTypeScreen += '</div>';
 
+  // HTML code block for the enter your names screen
   var buildStartScreen = function() {
     var startScreen = '<div class="screen screen-start" id="start">';
     startScreen += '<header>';
@@ -41,10 +43,12 @@ var Game = (function GamePlay() {
     return startScreen;
   };
 
+  // renders code blocks on the screen
   var renderHTML = function(target,html) {
     $(target).html(html);
   };
 
+  // highlights the current player's box on the screen
   var renderCurrentPlayer = function() {
     $('#player1,#player2').removeClass('active');
     var players = Players.getPlayers();
@@ -55,6 +59,7 @@ var Game = (function GamePlay() {
     }
   };
 
+  // makes a gray x or o appear in an unoccupied square when the current player hovers the mouse over it
   var hoverCurrent = function() {
     var players = Players.getPlayers();
     var hoverMarker;
@@ -75,6 +80,7 @@ var Game = (function GamePlay() {
     });
   };
 
+  // HTML code block for the game over screen
   var gameEndScreen = function(result) {
     var players = Players.getPlayers();
     var gameOver;
@@ -98,6 +104,8 @@ var Game = (function GamePlay() {
     return gameOver;
   };
 
+  // remove game over screen at game start if user just finished a game
+  // render the game type screen and call button event function
   var start = function() {
     if (repeat) {
       $('#finish').detach();
@@ -106,6 +114,7 @@ var Game = (function GamePlay() {
       setGameTypeButtons();
   };
 
+  // set event handlers for the game type buttons
    var setGameTypeButtons = function() {
     $('#1player').click(function(){
       type = 1;
@@ -117,6 +126,7 @@ var Game = (function GamePlay() {
     });
   };
 
+  // remove previous screen and render the enter your names screen
   var setGameType = function() {
     $("#type").detach();
     var startPage = buildStartScreen();
@@ -124,6 +134,8 @@ var Game = (function GamePlay() {
     getNames();
   };
 
+  // get name(s) of player(s) with form validation
+  // when names are entered and start button is clicked, current view is detached, initial board is rendered, and game begins
   var getNames = function() {
     $('#startGame').click(function(event) {
       $('input[name=player1],input[name=player2]').removeClass('inputError');
@@ -152,12 +164,14 @@ var Game = (function GamePlay() {
     });
   };
 
+  // set up on-screen interactivity for the current player
   var move = function() {
     renderCurrentPlayer();
     hoverCurrent();
     setMarker();
   };
 
+  // handles what happens when a player clicks on a square
   var setMarker = function() {
     var players = Players.getPlayers();
     var marker;
@@ -174,6 +188,9 @@ var Game = (function GamePlay() {
     });
   };
 
+  // after a player clicks on a square, check for a win or tie then change players.  
+  // if yes, remove current screen, render game over screen, and attach event handler to new game button.
+  // if no, change players, then call functions for the next player's move (human or computer)
   var afterMove = function() {
     var result = Board.status();
     var players = Players.getPlayers(); 
@@ -194,7 +211,7 @@ var Game = (function GamePlay() {
       }
     }
   };
-
+  // export init function for use in app.js
   return {
     init: init
   };

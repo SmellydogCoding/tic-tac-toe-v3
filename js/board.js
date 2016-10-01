@@ -2,10 +2,12 @@ var Board = (function Board() {
   "use strict";
   
   var gameboard = [];
+  // all of the possible 'three in a row' combinations
   var winningRoutes = [
     [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
   ]
 
+  // HTML code block for the board at game start
   var initialBoardHTML = '<div class="board" id="board">';
   initialBoardHTML += '<header>';
   initialBoardHTML += '<h1>Tic Tac Toe</h1>';
@@ -25,18 +27,22 @@ var Board = (function Board() {
   initialBoardHTML += '</ul>';
   initialBoardHTML += '</div>';
 
+  // clear the game board at the start of a new game
   var init = function() {
     gameboard = [];
   }
 
+  // export game board code block
   var getInitialBoard = function() {
     return initialBoardHTML;
   }
 
+  // export current game board
   var getBoard = function() {
     return gameboard;
   }
 
+  // parse the on-screen board for x and o and update the game board
   var boardContents = function() {
     $('.boxes li').each(function(){
       var index = parseInt($(this).attr('data-square'));
@@ -50,8 +56,8 @@ var Board = (function Board() {
     });
   }
 
+  // logic to check if a board (which could be either the game board and minimax board) has a win or tie
   var winningBoard = function (eitherboard) {
-//    debugger;
     var result = 'game in progress';
     for (var i = 0; i < winningRoutes.length; i++) {
       if (eitherboard[winningRoutes[i][0]] === 'x' && eitherboard[winningRoutes[i][1]] === 'x' && eitherboard[winningRoutes[i][2]] === 'x') {
@@ -68,17 +74,19 @@ var Board = (function Board() {
     return result;
   }
 
+  // update the game board and check for a win or tie after a move
   var status = function() {
     boardContents();
     var result = winningBoard(gameboard);
     return result;
   }
 
+  // update the minimax board and check for a win or tie after a move
   var checkAIBoard = function(aiboard) {
     var airesult = winningBoard(aiboard);
     return airesult;
   }
-
+  // export the following functions for use in the game module and ai module
   return {
     init: init,
     getInitialBoard: getInitialBoard,
