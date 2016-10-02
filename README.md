@@ -1,4 +1,4 @@
-# Interactive Form V1
+# Tic-Tac-Toe V3
 Full stack JavaScript Techdegree project 4
 
 JavaScript validated with JSHint
