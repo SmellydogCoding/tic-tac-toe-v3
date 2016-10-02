@@ -24,7 +24,7 @@ var AI = (function(){
       }
     }
     return availableMovesList;
-  }
+  };
   
   // scoring system for minimax
   var score = function(depth,aiboard) {
@@ -36,14 +36,14 @@ var AI = (function(){
     } else {
       return 0;
     }
-  }
+  };
 
   // makes a play (x or o) on the current minimax board (which also creates a new branch) and changes the marker
   var makeNewBranch = function(move,aiboard) {
     aiboard[move] = currentMarker;
     changePlayer();
     return aiboard;
-  }
+  };
 
   // changes the marker between x (computer) and o (human)
   var changePlayer = function() {
@@ -52,14 +52,14 @@ var AI = (function(){
       } else {
         currentMarker = 'x';
       }
-  }
+  };
 
   // clears the current move from the minimax board once the end of a branch is reached
   var clearMove = function(move,aiboard) {
     aiboard[move] = '';
     changePlayer();
     return aiboard;
-  }
+  };
 
   // minimax algorithm
   var minimax = function(aiboard,depth) {
@@ -98,14 +98,15 @@ var AI = (function(){
       computerChoice = moves[highScoreIndex];
       return scores[highScoreIndex];
     } else {
-      lowScore = Math.max.apply(Math,scores);
+      lowScore = Math.min.apply(Math,scores);
       lowScoreIndex = scores.indexOf(lowScore);
       computerChoice = moves[lowScoreIndex];
       return scores[lowScoreIndex];
     }
-  }
+  };
+
   // export the function computerMove for use in the game module
   return {
     computerMove: computerMove
-  }
+  };
 })();

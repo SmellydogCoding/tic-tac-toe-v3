@@ -1,11 +1,11 @@
-var Board = (function Board() {
+var Board = (function() {
   "use strict";
   
   var gameboard = [];
   // all of the possible 'three in a row' combinations
   var winningRoutes = [
     [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
-  ]
+  ];
 
   // HTML code block for the board at game start
   var initialBoardHTML = '<div class="board" id="board">';
@@ -30,17 +30,17 @@ var Board = (function Board() {
   // clear the game board at the start of a new game
   var init = function() {
     gameboard = [];
-  }
+  };
 
   // export game board code block
   var getInitialBoard = function() {
     return initialBoardHTML;
-  }
+  };
 
   // export current game board
   var getBoard = function() {
     return gameboard;
-  }
+  };
 
   // parse the on-screen board for x and o and update the game board
   var boardContents = function() {
@@ -54,7 +54,7 @@ var Board = (function Board() {
         gameboard[index] = '';
       }
     });
-  }
+  };
 
   // logic to check if a board (which could be either the game board and minimax board) has a win or tie
   var winningBoard = function (eitherboard) {
@@ -72,20 +72,21 @@ var Board = (function Board() {
         result = 'tie';
     }
     return result;
-  }
+  };
 
   // update the game board and check for a win or tie after a move
   var status = function() {
     boardContents();
     var result = winningBoard(gameboard);
     return result;
-  }
+  };
 
   // update the minimax board and check for a win or tie after a move
   var checkAIBoard = function(aiboard) {
     var airesult = winningBoard(aiboard);
     return airesult;
-  }
+  };
+
   // export the following functions for use in the game module and ai module
   return {
     init: init,
@@ -93,5 +94,5 @@ var Board = (function Board() {
     getBoard: getBoard,
     status: status,
     checkAIBoard: checkAIBoard
-  }
+  };
 })();

@@ -1,4 +1,4 @@
-var Game = (function GamePlay() {
+var Game = (function() {
   "use strict";
 
   // set players, clear board, and start new game
@@ -15,9 +15,9 @@ var Game = (function GamePlay() {
   var gameTypeScreen = '<div class="screen screen-start" id="type">';
   gameTypeScreen += '<header>';
   gameTypeScreen += '<h1>Tic Tac Toe</h1>';
-  gameTypeScreen += '<p class="intro">Please Choose Your Game Type:</p>'
-  gameTypeScreen += '<a id="1player" href="#" class="button">1 Player Game<br><span class="subtitle">player vs. computer</span></a>'
-  gameTypeScreen += '<a id="2player" href="#" class="button">2 Player Game<br><span class="subtitle">player vs. player</span></a>'
+  gameTypeScreen += '<p class="intro">Please Choose Your Game Type:</p>';
+  gameTypeScreen += '<a id="1player" href="#" class="button">1 Player Game<br><span class="subtitle">player vs. computer</span></a>';
+  gameTypeScreen += '<a id="2player" href="#" class="button">2 Player Game<br><span class="subtitle">player vs. player</span></a>';
   gameTypeScreen += '</header>';
   gameTypeScreen += '</div>';
 
