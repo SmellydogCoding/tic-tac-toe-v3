@@ -33,10 +33,21 @@ h1 {
     color: #000; 
 }
 
+#pageHeader {
+  text-align: center;
+}
+
+#pageHeader a {
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 0.6rem;
+  color: #20793b;
+}
+
 .screen {
   text-align: center;
   position: absolute;
-  top: 0;
+  top: 5%;
   left: 0;
   right: 0;
   bottom: 0;
@@ -45,7 +56,7 @@ h1 {
 
 .screen header {
   position: relative;
-  top: 50%;
+  top: 45%;
   -webkit-transform: translatey(-50%);
   transform: translatey(-50%); 
 }

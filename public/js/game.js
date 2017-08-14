@@ -110,7 +110,7 @@ var Game = (function() {
     if (repeat) {
       $('#finish').detach();
     }
-      renderHTML('body',gameTypeScreen);
+      renderHTML('#game',gameTypeScreen);
       setGameTypeButtons();
   };
 
@@ -130,7 +130,7 @@ var Game = (function() {
   var setGameType = function() {
     $("#type").detach();
     var startPage = buildStartScreen();
-    renderHTML('body',startPage);
+    renderHTML('#game',startPage);
     getNames();
   };
 
@@ -156,7 +156,7 @@ var Game = (function() {
         } else var player2 = 'Computer';
         Players.setPlayerNames(player1,player2);
         $("#start").detach();
-        renderHTML('body',Board.getInitialBoard);
+        renderHTML('#game',Board.getInitialBoard);
         $('.player1').html(player1);
         $('.player2').html(player2);
         move();
@@ -196,7 +196,7 @@ var Game = (function() {
     var players = Players.getPlayers(); 
     if (result === "winx" || result === "wino" || result === "tie") {
       $('#board').detach();
-      renderHTML('body',gameEndScreen(result));
+      renderHTML('#game',gameEndScreen(result));
       $('#newGame').click(function() {
         repeat = true;
         init();
