@@ -33,9 +33,9 @@ var Game = (function() {
       startScreen += 'Names:';
     }
     startScreen += '</p>';
-    startScreen += '<input type="text" name="player1" placeholder="Player 1" class="button">';
+    startScreen += '<input type="text" name="player1" placeholder="Player 1" class="button" maxlength="9">';
     if (type === 2) {
-      startScreen += '<input type="text" name="player2" placeholder ="Player 2" class="button">';
+      startScreen += '<input type="text" name="player2" placeholder ="Player 2" class="button" maxlength="9">';
     }
     startScreen += '<a id="startGame" href="#" class="button">Start Game</a>';
     startScreen += '</header>';

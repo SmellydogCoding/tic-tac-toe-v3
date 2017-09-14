@@ -47,7 +47,7 @@ h1 {
 .screen {
   text-align: center;
   position: absolute;
-  top: 5%;
+  top: 8%;
   left: 0;
   right: 0;
   bottom: 0;
@@ -143,7 +143,7 @@ h1 {
   color: rgba(0, 0, 0, 0.2);
   text-align: center;
   position: absolute;
-  top: 5%;
+  top: 8%;
   width: 35%;
   padding: 1.25em 1.0em 1em;
   outline: 1px solid #ccc;
@@ -252,4 +252,41 @@ h1 {
 
 .player2 {
   float: left;
+}
+
+/*-----------------
+|  Media Queries  |
+-----------------*/
+
+@media screen and (max-width: 768px) {
+  header h1 {
+    margin: 1.5rem auto 0;
+    width: 100%;
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 0.8;
+  }
+  .players {
+    width: 20%;
+    top: 8%;
+  }
+  .player1,.player2 {
+    font-size: 1.1rem;
+    position: absolute;
+    top: 75%;
+    left: 2%;
+  }
+
+  .boxes {
+    margin-top: 4.0rem;
+  }
+
+  .boxes .box {
+    height: 110px;
+    width: 110px;
+  }
+
+  .boxes .box:nth-child(3n + 1) {
+    margin-left: 1.8rem;
+  }
 }
